@@ -1,0 +1,304 @@
+:root {
+  --text-main: #fffaf0;
+  --text-soft: rgba(255, 250, 240, 0.82);
+  --text-muted: rgba(255, 250, 240, 0.66);
+  --track: rgba(255, 255, 255, 0.22);
+  --fill-start: #f7d794;
+  --fill-end: #8fd6c9;
+  --day-gradient: linear-gradient(135deg, #355c4c 0%, #7ca982 48%, #d7c7a5 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: var(--text-main);
+  background: var(--day-gradient);
+  font-family:
+    "M PLUS Rounded 1c",
+    "Hiragino Maru Gothic ProN",
+    "Yu Gothic",
+    system-ui,
+    sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+body[data-day="0"] {
+  --day-gradient: linear-gradient(135deg, #5f4b45 0%, #c88f72 48%, #ead9c6 100%);
+  --fill-start: #ffd1a8;
+  --fill-end: #b8e0d2;
+}
+
+body[data-day="1"] {
+  --day-gradient: linear-gradient(135deg, #355c4c 0%, #7ca982 48%, #d7c7a5 100%);
+  --fill-start: #dcecc9;
+  --fill-end: #7fc8a9;
+}
+
+body[data-day="2"] {
+  --day-gradient: linear-gradient(135deg, #335c67 0%, #71a5b7 48%, #f2e6d8 100%);
+  --fill-start: #c9f0ff;
+  --fill-end: #80cbc4;
+}
+
+body[data-day="3"] {
+  --day-gradient: linear-gradient(135deg, #59656f 0%, #9aa7a8 48%, #d8d2c5 100%);
+  --fill-start: #e6dccb;
+  --fill-end: #a8dadc;
+}
+
+body[data-day="4"] {
+  --day-gradient: linear-gradient(135deg, #111827 0%, #31446e 52%, #c5a880 100%);
+  --fill-start: #c8d8ff;
+  --fill-end: #f4c27a;
+}
+
+body[data-day="5"] {
+  --day-gradient: linear-gradient(135deg, #59344f 0%, #bd7050 48%, #3e6f7b 100%);
+  --fill-start: #ffd0a6;
+  --fill-end: #9de0d3;
+}
+
+body[data-day="6"] {
+  --day-gradient: linear-gradient(135deg, #496f5d 0%, #95b895 48%, #e3d9bd 100%);
+  --fill-start: #d9ed92;
+  --fill-end: #99d98c;
+}
+
+.background-photo,
+.screen-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.background-photo {
+  z-index: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 900ms ease;
+}
+
+body.has-photo .background-photo {
+  opacity: 1;
+  animation: slow-zoom 80s ease-in-out infinite alternate;
+}
+
+.screen-overlay {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.58) 72%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.6));
+}
+
+.app-shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 2rem 2rem 8.5rem;
+}
+
+.countdown {
+  width: min(100%, 54rem);
+  text-align: center;
+  text-shadow: 0 0.18rem 1.4rem rgba(0, 0, 0, 0.58);
+}
+
+.date-label,
+.main-title,
+.status-message,
+.sub-message {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.date-label {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+}
+
+.main-title {
+  margin-top: 0.75rem;
+  color: var(--text-soft);
+  font-size: 2.4rem;
+}
+
+.clock {
+  display: block;
+  margin-top: 0.75rem;
+  color: var(--text-main);
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.status-message {
+  margin-top: 1.2rem;
+  color: var(--text-main);
+  font-size: 2rem;
+}
+
+.sub-message {
+  margin-top: 0.35rem;
+  color: var(--text-soft);
+  font-size: 1.35rem;
+}
+
+.progress-area {
+  position: fixed;
+  z-index: 3;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: calc(1.2rem + env(safe-area-inset-bottom));
+  left: max(1.25rem, env(safe-area-inset-left));
+  color: var(--text-soft);
+  text-shadow: 0 0.1rem 0.9rem rgba(0, 0, 0, 0.55);
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.progress-track {
+  width: 100%;
+  height: 1.05rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: var(--track);
+  box-shadow: inset 0 0.08rem 0.6rem rgba(0, 0, 0, 0.28);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--fill-start), var(--fill-end));
+  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.26);
+  transition: width 450ms ease;
+}
+
+.photo-credit {
+  position: fixed;
+  z-index: 4;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: calc(4.45rem + env(safe-area-inset-bottom));
+  max-width: min(22rem, calc(100% - 2.5rem));
+  overflow: hidden;
+  color: rgba(255, 250, 240, 0.62);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: right;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  text-shadow: 0 0.1rem 0.8rem rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+.photo-credit:hover {
+  color: rgba(255, 250, 240, 0.9);
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1.04);
+  }
+
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@media (orientation: landscape) {
+  .app-shell {
+    padding-bottom: 7.5rem;
+  }
+
+  .clock {
+    font-size: 9.5rem;
+  }
+
+  .main-title {
+    font-size: 2.2rem;
+  }
+
+  .status-message {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    padding: 1.4rem 1.2rem 8rem;
+  }
+
+  .date-label {
+    font-size: 1rem;
+  }
+
+  .main-title {
+    font-size: 1.85rem;
+  }
+
+  .clock {
+    font-size: 4.75rem;
+  }
+
+  .status-message {
+    font-size: 1.45rem;
+  }
+
+  .sub-message {
+    font-size: 1rem;
+  }
+
+  .progress-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-height: 620px) {
+  .app-shell {
+    padding-top: 1rem;
+    padding-bottom: 6.6rem;
+  }
+
+  .clock {
+    font-size: 5.7rem;
+  }
+
+  .main-title {
+    margin-top: 0.45rem;
+    font-size: 1.65rem;
+  }
+
+  .status-message {
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+  }
+
+  .sub-message {
+    font-size: 0.95rem;
+  }
+}

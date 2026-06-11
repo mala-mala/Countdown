@@ -1,0 +1,13 @@
+{
+  "name": "業務終了カウントダウン",
+  "short_name": "終業カウント",
+  "description": "平日の17:15までを表示するiPad向けカウントダウンアプリです。",
+  "lang": "ja-JP",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101418",
+  "theme_color": "#101418",
+  "orientation": "any",
+  "categories": ["productivity", "utilities"]
+}
