@@ -1,5 +1,6 @@
 :root {
   --text-main: #fffaf0;
+  --clock-face: rgba(255, 250, 240, 0.9);
   --text-soft: rgba(255, 250, 240, 0.82);
   --text-muted: rgba(255, 250, 240, 0.66);
   --track: rgba(255, 255, 255, 0.22);
@@ -85,6 +86,7 @@ body[data-day="6"] {
   z-index: 0;
   background-position: center;
   background-size: cover;
+  filter: brightness(1.05) contrast(1.08) saturate(1.08);
   opacity: 0;
   transform: scale(1.04);
   transition: opacity 900ms ease;
@@ -98,8 +100,8 @@ body.has-photo .background-photo {
 .screen-overlay {
   z-index: 1;
   background:
-    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.58) 72%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.6));
+    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.36) 72%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.44));
 }
 
 .app-shell {
@@ -114,7 +116,7 @@ body.has-photo .background-photo {
 .countdown {
   width: min(100%, 54rem);
   text-align: center;
-  text-shadow: 0 0.18rem 1.4rem rgba(0, 0, 0, 0.58);
+  text-shadow: 0 0.18rem 1.1rem rgba(0, 0, 0, 0.52);
 }
 
 .date-label,
@@ -140,13 +142,16 @@ body.has-photo .background-photo {
 .clock {
   display: block;
   margin-top: 0.75rem;
-  color: var(--text-main);
+  color: var(--clock-face);
   font-size: 8rem;
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+  text-shadow:
+    0 0.2rem 1.2rem rgba(0, 0, 0, 0.46),
+    0 0 2.4rem rgba(255, 255, 255, 0.14);
 }
 
 .status-message {

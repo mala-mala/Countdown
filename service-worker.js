@@ -1,4 +1,4 @@
-const CACHE_NAME = "work-end-countdown-v1";
+const CACHE_NAME = "work-end-countdown-v2";
 
 // PWAとして起動するために必要な、同じフォルダ内のファイルを保存します。
 const APP_SHELL = [
