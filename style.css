@@ -86,7 +86,7 @@ body[data-day="6"] {
   z-index: 0;
   background-position: center;
   background-size: cover;
-  filter: brightness(1.05) contrast(1.08) saturate(1.08);
+  filter: brightness(1.16) contrast(1.13) saturate(1.14);
   opacity: 0;
   transform: scale(1.04);
   transition: opacity 900ms ease;
@@ -100,8 +100,8 @@ body.has-photo .background-photo {
 .screen-overlay {
   z-index: 1;
   background:
-    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.36) 72%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.44));
+    radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.18) 74%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.24));
 }
 
 .app-shell {
@@ -116,7 +116,9 @@ body.has-photo .background-photo {
 .countdown {
   width: min(100%, 54rem);
   text-align: center;
-  text-shadow: 0 0.18rem 1.1rem rgba(0, 0, 0, 0.52);
+  text-shadow:
+    0 0.2rem 1.35rem rgba(0, 0, 0, 0.64),
+    0 0 2.8rem rgba(0, 0, 0, 0.24);
 }
 
 .date-label,
@@ -150,8 +152,8 @@ body.has-photo .background-photo {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
   text-shadow:
-    0 0.2rem 1.2rem rgba(0, 0, 0, 0.46),
-    0 0 2.4rem rgba(255, 255, 255, 0.14);
+    0 0.22rem 1.45rem rgba(0, 0, 0, 0.62),
+    0 0 3.2rem rgba(0, 0, 0, 0.28);
 }
 
 .status-message {
