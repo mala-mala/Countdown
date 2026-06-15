@@ -1,9 +1,11 @@
 // ここにUnsplash Access Keyを入れる
 // 例: const UNSPLASH_ACCESS_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-const UNSPLASH_ACCESS_KEY = "zntS6ljN5B7LRcHFufzO0TZviStqd9Xs8CCc3JTjZx4";
+const UNSPLASH_ACCESS_KEY = "";
 
 // 業務時間はここで管理します。変更したくなったら、この数字だけ直せばOKです。
-const WORK_START = { hour: 8, minute: 30 };
+const WORK_START = { hour: 8, minute: 15 };
+const LUNCH_START = { hour: 12, minute: 0 };
+const LUNCH_END = { hour: 13, minute: 0 };
 const WORK_END = { hour: 17, minute: 15 };
 
 // Date.getDay() の戻り値に合わせています。0が日曜、1が月曜です。
@@ -58,7 +60,7 @@ function getDateLabel(date) {
   return `${month}月${day}日 ${WEEKDAY_LABELS[date.getDay()]}`;
 }
 
-// 指定日の 8:30 / 17:15 のDateを作ります。
+// 指定日の 8:15 / 12:00 / 13:00 / 17:15 のDateを作ります。
 function getTodayTime(date, hour, minute) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, 0, 0);
 }
@@ -83,11 +85,25 @@ function formatRemainingTime(milliseconds) {
 
 function setProgress(percent) {
   const safePercent = clamp(percent, 0, 100);
-  const roundedPercent = Math.round(safePercent);
+  const displayPercent = safePercent >= 100 ? 100 : Math.floor(safePercent);
 
   elements.progressFill.style.width = `${safePercent}%`;
-  elements.progressPercent.textContent = `${roundedPercent}%`;
-  elements.progressTrack.setAttribute("aria-valuenow", String(roundedPercent));
+  elements.progressPercent.textContent = `${displayPercent}%`;
+  elements.progressTrack.setAttribute("aria-valuenow", String(displayPercent));
+}
+
+function setClockRemaining(targetTime, now) {
+  const remaining = targetTime.getTime() - now.getTime();
+  const totalSeconds = Math.max(0, Math.floor(remaining / 1000));
+
+  elements.clock.textContent = formatRemainingTime(remaining);
+  elements.clock.setAttribute("datetime", `PT${totalSeconds}S`);
+}
+
+function setDailyProgress(now, startTime, endTime) {
+  const elapsed = now.getTime() - startTime.getTime();
+  const duration = endTime.getTime() - startTime.getTime();
+  setProgress((elapsed / duration) * 100);
 }
 
 function setPhotoCredit(photoData) {
@@ -255,6 +271,8 @@ function updateCountdown() {
   const now = new Date();
   const dateKey = getLocalDateKey(now);
   const startTime = getTodayTime(now, WORK_START.hour, WORK_START.minute);
+  const lunchStartTime = getTodayTime(now, LUNCH_START.hour, LUNCH_START.minute);
+  const lunchEndTime = getTodayTime(now, LUNCH_END.hour, LUNCH_END.minute);
   const endTime = getTodayTime(now, WORK_END.hour, WORK_END.minute);
 
   // 日付が変わったら、曜日テーマと背景画像も切り替えます。
@@ -279,6 +297,16 @@ function updateCountdown() {
   elements.mainTitle.textContent = "業務終了まで";
   elements.progressLabel.textContent = "今日の進み具合";
 
+  if (now < startTime) {
+    elements.mainTitle.textContent = "業務開始前";
+    elements.clock.textContent = "--:--:--";
+    elements.clock.setAttribute("datetime", "");
+    elements.statusMessage.textContent = "8:15から午前のカウントを始めます";
+    elements.subMessage.textContent = "今日もゆっくり準備しましょう";
+    setProgress(0);
+    return;
+  }
+
   if (now >= endTime) {
     elements.clock.textContent = "00:00:00";
     elements.clock.setAttribute("datetime", "PT0S");
@@ -288,23 +316,29 @@ function updateCountdown() {
     return;
   }
 
-  const remaining = endTime.getTime() - now.getTime();
-  const elapsed = now.getTime() - startTime.getTime();
-  const workDuration = endTime.getTime() - startTime.getTime();
-  const progress = (elapsed / workDuration) * 100;
-
-  elements.clock.textContent = formatRemainingTime(remaining);
-  elements.clock.setAttribute("datetime", `PT${Math.max(0, Math.floor(remaining / 1000))}S`);
-
-  if (now < startTime) {
-    elements.statusMessage.textContent = "業務開始前です";
-    elements.subMessage.textContent = "8:30から進捗バーが動き始めます";
-  } else {
-    elements.statusMessage.textContent = "17:15まで、あと少し";
-    elements.subMessage.textContent = "おだやかに進めていきましょう";
+  if (now < lunchStartTime) {
+    elements.mainTitle.textContent = "午前の終了まで";
+    elements.statusMessage.textContent = "12:00まで、あと少し";
+    elements.subMessage.textContent = "午前のカウントダウンです";
+    setClockRemaining(lunchStartTime, now);
+    setDailyProgress(now, startTime, endTime);
+    return;
   }
 
-  setProgress(progress);
+  if (now < lunchEndTime) {
+    elements.mainTitle.textContent = "休憩中";
+    elements.statusMessage.textContent = "13:00まで休憩中です";
+    elements.subMessage.textContent = "午後に向けて、ひと息つきましょう";
+    setClockRemaining(lunchEndTime, now);
+    setDailyProgress(now, startTime, endTime);
+    return;
+  }
+
+  elements.mainTitle.textContent = "午後の終了まで";
+  elements.statusMessage.textContent = "17:15まで、あと少し";
+  elements.subMessage.textContent = "午後のカウントダウンです";
+  setClockRemaining(endTime, now);
+  setDailyProgress(now, startTime, endTime);
 }
 
 function registerServiceWorker() {
